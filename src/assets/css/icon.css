@@ -6,7 +6,7 @@
 	    overflow: hidden;
 	}
 
-.login{
-		width: 100px;
-		height: 100px;
-	}
+.fold{
+	width: 64;
+	height: 64;
+}

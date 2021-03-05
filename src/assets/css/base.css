@@ -26,13 +26,14 @@ body {
   color: var(--color-text);
   /* rem vw/vh */
   width: 100vw;
+	padding:0px;
+	margin:0px;
 }
 
 a {
   color: var(--color-text);
   text-decoration: none;
 }
-
 
 .clear-fix::after {
   clear: both;
@@ -54,4 +55,3 @@ a {
 .right {
   float: right;
 }
-

@@ -7,11 +7,10 @@
 <script>
 	export default {
 	  name: 'App',
-	  components: {
-	  }
 	}
 </script>
 
 <style>
 	@import "assets/css/base.css";
+	@import "assets/css/container.css";
 </style>
