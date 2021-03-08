@@ -2,6 +2,7 @@
 	<el-aside width="auto">
 		<el-menu
 		    class="sidebar-el-menu"
+			:default-active="onRoutes"
 		    :collapse="$store.state.collapse"
 		    background-color="#324157"
 		    text-color="#bfcbd9"
@@ -55,6 +56,11 @@
 <script>
 	export default {
 	    name: "Aside",
+		computed: {
+		    onRoutes() {
+		        return this.$route.path.replace('/', '');
+		    }
+		},
 		data() {
 		    return {
 				items: [
@@ -145,6 +151,7 @@
 		top: 26px;
 		left: 15px;
 		color: #fff;
+		white-space: nowrap;
 	}
 	.el-aside{
 		display: block;

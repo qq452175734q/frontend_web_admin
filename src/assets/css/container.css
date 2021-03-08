@@ -21,3 +21,10 @@
     overflow-y: scroll;
     box-sizing: border-box;
 }
+
+.el-header{
+	height: 70px;
+	width: 100%;
+	background-color: #ffffff;
+	border-bottom: 1px solid #dadada;
+}

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="dashboard">
 		<li>主页</li>
 	</div>
 </template>
@@ -11,4 +11,8 @@
 </script>
 
 <style>
+	.dashboard{
+		width: 100px;
+		height: 100px;
+	}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<el-header height="70px">
+	<div>
 		<div class="collapse-btn" @click="collapseChage">
 			<svg-icon v-if="!$store.state.collapse" iconClass="fold" className="fold"></svg-icon>
 			<svg-icon v-else iconClass="unfold" className="fold"></svg-icon>
@@ -44,7 +44,7 @@
 			    </el-dropdown>
 			</div>
 		</div>
-	</el-header>
+	</div>
 </template>
 
 <script>
@@ -101,12 +101,6 @@
 </script>
 
 <style>
-	.el-header{
-		height: 70px;
-		width: 100%;
-		background-color: #ffffff;
-		border-bottom: 1px solid #dadada;
-	}
 	.collapse-btn {
 	    float: left;
 	    cursor: pointer;

@@ -10,6 +10,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+  	path: '/',
+  	redirect: '/dashboard',
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('views/login/Login')
@@ -21,7 +25,22 @@ const routes = [
 		children:[
 			{
 				path: '/dashboard',
-				name: 'Dashboard',
+				name: '主页',
+				component: () => import('views/dashboard/Dashboard'),
+			}
+			,{
+				path: '/dashboard2',
+				name: '主页2',
+				component: () => import('views/dashboard/Dashboard'),
+			}
+			,{
+				path: '/dashboard3',
+				name: '主页3',
+				component: () => import('views/dashboard/Dashboard'),
+			}
+			,{
+				path: '/order',
+				name: '订单',
 				component: () => import('views/dashboard/Dashboard'),
 			}
 		]
@@ -32,6 +51,11 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to,from,next) => {
+	document.title = to.matched[0].meta.title
+	next()
 })
 
 export default router
