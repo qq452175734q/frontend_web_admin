@@ -1,7 +1,7 @@
 <template>
-	<div>
+	<div class="header">
 		<div class="collapse-btn" @click="collapseChage">
-			<svg-icon v-if="!$store.state.collapse" iconClass="fold" className="fold"></svg-icon>
+			<svg-icon v-if="!collapse" iconClass="fold" className="fold"></svg-icon>
 			<svg-icon v-else iconClass="unfold" className="fold"></svg-icon>
 		</div>
 		<div class="header-right">
@@ -52,6 +52,7 @@
 	export default {
 	    data() {
 	        return {
+				collapse: true,
 	            fullscreen: false,
 	            username: 'oldliang',
 	            message: 2
@@ -60,7 +61,8 @@
 		methods: {
 			// 侧边栏折叠
 			collapseChage() {
-				this.$store.commit('isCollapse');
+			    this.collapse = !this.collapse;
+			    event.$emit('collapse', this.collapse);
 			},
 			// 全屏事件
 			handleFullScreen() {
@@ -101,6 +103,10 @@
 </script>
 
 <style>
+	.header{
+		overflow: hidden;
+		height: 70px;
+	}
 	.collapse-btn {
 	    float: left;
 	    cursor: pointer;
@@ -110,6 +116,7 @@
 	.header-right {
 	    float: right;
 	    padding-right: 50px;
+		overflow: hidden;
 	}
 	.header-user-con {
 	    display: flex;

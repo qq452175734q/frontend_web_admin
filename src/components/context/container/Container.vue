@@ -1,7 +1,7 @@
 <template>
     <el-container>
     	<Aside/>
-		<el-container class="content-box" :class="{'content-box-collapse':$store.state.collapse}">
+		<el-container class="content-box" :class="{'content-box-collapse':collapse}">
 		    <el-header height="70px"><Header/></el-header>
 			<Tags/>
 		    <Main/>
@@ -10,21 +10,29 @@
 </template>
 
 <script>
-import Aside from './aside/Aside';
-import Header from './header/Header';
-import Tags from './tags/Tags';
-import Main from './main/Main';
-export default {
-    components: {
-        Aside,
-		Header,
-		Tags,
-		Main
-    },
-    created() {
-        
-    }
-};
+	import event from './Event';
+	import Aside from './aside/Aside';
+	import Header from './header/Header';
+	import Tags from './tags/Tags';
+	import Main from './main/Main';
+	export default {
+		data() {
+			return {
+				collapse: true
+			};
+		},
+		components: {
+			Aside,
+			Header,
+			Tags,
+			Main
+		},
+		created() {
+			event.$on('content-box-collapse', msg => {
+				this.collapse = msg;
+			});
+		}
+	};
 </script>
 	
 <style>

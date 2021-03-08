@@ -1,7 +1,7 @@
 <template>
-	<div class="tags" v-if="this.$store.getters.tagsListLength > 0">
+	<div class="tags" v-if="showTags">
 		<ul>
-			<li class="tags-li" v-for="(item,index) in $store.state.tagsList" :class="{'active':isActive(item.path)}" :key="index">
+			<li class="tags-li" v-for="(item,index) in tagsList" :class="{'active':isActive(item.path)}" :key="index">
 				<router-link :to="item.path" class="tags-li-title">
 					{{item.title}}
 				</router-link>
@@ -23,77 +23,90 @@
 </template>
 
 <script>
+	import event from '../Event';
 	export default {
 		name: 'Tags',
+		data() {
+		    return {
+		        tagsList: []
+		    }
+		},
 		watch:{
 		    $route(newValue, oldValue){
-				console.log(newValue)
-				console.log(oldValue)
 		        this.setTags(newValue);
 		    }
 		},
 		created(){
-			this.setTags(this.$route);
-			for (let i = 0, len = this.$store.getters.tagsListLength; i < len; i++) {
-			    const item = this.$store.state.tagsList[i];
-			    if(item.path === this.$route.fullPath){
-			        if(i < len - 1){
-			            this.$router.push(this.$store.state.tagsList[i+1].path);
-			        }else if(i > 0){
-			            this.$router.push(this.$store.state.tagsList[i-1].path);
-			        }else{
-			            this.$router.push('/');
-			        }
-					this.$store.commit('removeTagsList',i)
-			        break;
-			    }
-			}
+		    this.setTags(this.$route);
+		    // 监听关闭当前页面的标签页
+		    for (let i = 0, len = this.tagsList.length; i < len; i++) {
+		        const item = this.tagsList[i];
+		        if(item.path === this.$route.fullPath){
+		            if(i < len - 1){
+		                this.$router.push(this.tagsList[i+1].path);
+		            }else if(i > 0){
+		                this.$router.push(this.tagsList[i-1].path);
+		            }else{
+		                this.$router.push('/');
+		            }
+		            this.tagsList.splice(i, 1);
+		            break;
+		        }
+		    }
 		},
-		methods:{
-			isActive(path) {
-			    return path === this.$route.fullPath;
-			},
-			handleTags(command){
-			    command === 'other' ? this.closeOther() : this.closeAll();
-			},
-			// 关闭单个标签
-			closeTags(index) {
-				const delItem = this.$store.commit('removeTagsList',index)
-				const item = this.$store.state.tagsList[index] ? this.$store.state.tagsList[index] : this.$store.state.tagsList[index - 1];
-			    if (item) {
-					this.$router.push(item.path);
-			    }else{
-			        this.$router.push('/');
-			    }
-			},
-			// 关闭其他标签
-			closeOther(){
-			    const curItem = this.$store.getters.closeOther(this.$route.fullPath)
-			    this.$store.commit('resetTagsList',curItem)
-			},
-			// 关闭全部标签
-			closeAll(){
-				this.$store.commit('resetTagsList',[])
-				this.$router.push('/');
-			},
-			// 设置标签
-			setTags(route){
-			    const isExist = this.$store.getters.checkExist(route.fullPath)
-			    if(!isExist){
-			        if(this.$store.getters.tagsListLength >= 8){
-			            this.$store.shiftTagsList
-			        }
-					this.$store.commit('pushTagsList',{
-			            title: route.name,
-			            path: route.fullPath,
-			            name: route.matched[1].components.default.name
-			        })
-			    }
-			},
-			handleTags(command){
-			    command === 'other' ? this.closeOther() : this.closeAll();
-			}
-		}
+		methods: {
+		    isActive(path) {
+		        return path === this.$route.fullPath;
+		    },
+		    // 关闭单个标签
+		    closeTags(index) {
+		        const delItem = this.tagsList.splice(index, 1)[0];
+		        const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1];
+		        if (item) {
+		            delItem.path === this.$route.fullPath && this.$router.push(item.path);
+		        }else{
+		            this.$router.push('/');
+		        }
+		    },
+		    // 关闭全部标签
+		    closeAll(){
+		        this.tagsList = [];
+		        this.$router.push('/');
+		    },
+		    // 关闭其他标签
+		    closeOther(){
+		        const curItem = this.tagsList.filter(item => {
+		            return item.path === this.$route.fullPath;
+		        })
+		        this.tagsList = curItem;
+		    },
+		    // 设置标签
+		    setTags(route){
+		        const isExist = this.tagsList.some(item => {
+		            return item.path === route.fullPath;
+		        })
+		        if(!isExist){
+		            if(this.tagsList.length >= 8){
+		                this.tagsList.shift();
+		            }
+					console.log(route)
+		            this.tagsList.push({
+		                title: route.name,
+		                path: route.fullPath,
+		                name: route.matched[1].components.default.name
+		            })
+		        }
+		        event.$emit('tags', this.tagsList);
+		    },
+		    handleTags(command){
+		        command === 'other' ? this.closeOther() : this.closeAll();
+		    }
+		},
+		computed: {
+		    showTags() {
+		        return this.tagsList.length > 0;
+		    }
+		},
 	}
 </script>
 
